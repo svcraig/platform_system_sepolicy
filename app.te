@@ -274,7 +274,8 @@ allow appdomain cache_file:dir getattr;
 
 # Superuser capabilities.
 # bluetooth requires net_admin and wake_alarm.
-neverallow { appdomain -bluetooth } self:capability *;
+# iot_wifi requires net_admin.
+neverallow { appdomain -bluetooth -iot_wifi } self:capability *;
 neverallow { appdomain -bluetooth } self:capability2 *;
 
 # Block device access.
@@ -441,6 +442,7 @@ neverallow appdomain {
 # Blacklist app domains not allowed to execute from /data
 neverallow {
   bluetooth
+  iot_wifi
   isolated_app
   nfc
   radio
