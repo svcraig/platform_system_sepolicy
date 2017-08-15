@@ -1,0 +1,4 @@
+# IoTWifiService app
+# TODO(bryanhenry,b/64616008): Move this domain type into device/google/iot
+# once we no longer need to modify the self:capability neverallow
+type iot_wifi, domain;
