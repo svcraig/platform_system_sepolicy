@@ -12,3 +12,10 @@ set_prop(hal_lowpan_server, lowpan_prop)
 
 # Allow hal_lowpan_server to open lowpan_devices
 allow hal_lowpan_server lowpan_device:chr_file rw_file_perms;
+
+###
+### neverallow rules
+###
+
+# Only LoWPAN HAL may directly access LoWPAN hardware
+neverallow { domain -hal_lowpan_server -init -ueventd } lowpan_device:chr_file ~getattr;
