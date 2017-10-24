@@ -9,10 +9,14 @@
     e2fs_exec
     hal_broadcastradio_hwservice
     hal_cas_hwservice
+    hal_lowpan_hwservice
     hal_neuralnetworks_hwservice
     hal_tetheroffload_hwservice
     hal_wifi_offload_hwservice
     kmsg_debug_device
+    lowpan_device
+    lowpan_prop
+    lowpan_service
     mediaprovider_tmpfs
     netd_stable_secret_prop
     package_native_service
@@ -24,7 +28,11 @@
     thermalserviced_exec
     thermalserviced_tmpfs
     timezone_service
-    tombstoned_java_trace_socket))
+    tombstoned_java_trace_socket
+    wpantund
+    wpantund_exec
+    wpantund_service
+    wpantund_tmpfs))
 
 ;; private_objects - a collection of types that were labeled differently in
 ;;     older policy, but that should not remain accessible to vendor policy.
