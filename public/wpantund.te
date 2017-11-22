@@ -10,6 +10,9 @@ binder_call(wpantund, system_server)
 # wpantund needs to be able to check in with the lowpan_service
 allow wpantund lowpan_service:service_manager find;
 
+# wpantund needs to be able to verify permissions
+allow wpantund permission_service:service_manager find;
+
 # Allow wpantund to call any callbacks that have been registered with it.
 # Generally, only privileged apps are able to register callbacks with
 # wpantund, so we are limiting the scope for callbacks to only privileged
