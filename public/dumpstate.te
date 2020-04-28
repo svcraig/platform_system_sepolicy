@@ -90,7 +90,6 @@ allow dumpstate {
   hal_sensors_server
   hal_thermal_server
   hal_vr_server
-  system_suspend_server
 }:process signal;
 
 # Connect to tombstoned to intercept dumps.
@@ -215,8 +214,10 @@ userdebug_or_eng(`
 ')
 
 # Access /data/misc/logd
-allow dumpstate misc_logd_file:dir r_dir_perms;
-allow dumpstate misc_logd_file:file r_file_perms;
+userdebug_or_eng(`
+  allow dumpstate misc_logd_file:dir r_dir_perms;
+  allow dumpstate misc_logd_file:file r_file_perms;
+')
 
 allow dumpstate app_fuse_file:dir r_dir_perms;
 allow dumpstate overlayfs_file:dir r_dir_perms;
@@ -275,10 +276,6 @@ allow dumpstate ion_device:chr_file r_file_perms;
 
 # Allow dumpstate to run top
 allow dumpstate proc_stat:file r_file_perms;
-
-allow dumpstate proc_pressure_cpu:file r_file_perms;
-allow dumpstate proc_pressure_mem:file r_file_perms;
-allow dumpstate proc_pressure_io:file r_file_perms;
 
 # Allow dumpstate to talk to installd over binder
 binder_call(dumpstate, installd);

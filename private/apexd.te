@@ -50,10 +50,6 @@ allow apexd staging_data_file:file unlink;
 allow apexd staging_data_file:dir r_dir_perms;
 allow apexd staging_data_file:file { r_file_perms link };
 
-# allow apexd to read files from /vendor/apex
-allow apexd vendor_apex_file:dir r_dir_perms;
-allow apexd vendor_apex_file:file r_file_perms;
-
 # Unmount and mount filesystems
 allow apexd labeledfs:filesystem { mount unmount };
 
@@ -79,9 +75,6 @@ allow apexd kmsg_device:chr_file w_file_perms;
 # Allow apexd to reboot device. Required for rollbacks of apexes that are
 # not covered by rollback manager.
 set_prop(apexd, powerctl_prop)
-
-# Allow apexd to stop itself
-set_prop(apexd, ctl_apexd_prop)
 
 # Find the vold service, and call into vold to manage FS checkpoints
 allow apexd vold_service:service_manager find;

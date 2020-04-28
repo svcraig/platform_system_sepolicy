@@ -153,7 +153,6 @@ class filesystem
 	associate
 	quotamod
 	quotaget
-	watch
 }
 
 class dir
@@ -167,11 +166,6 @@ inherits file
 	open
 	audit_access
 	execmod
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class file
@@ -182,11 +176,6 @@ inherits file
 	execmod
 	open
 	audit_access
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class lnk_file
@@ -195,11 +184,6 @@ inherits file
 	open
 	audit_access
 	execmod
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class chr_file
@@ -210,11 +194,6 @@ inherits file
 	execmod
 	open
 	audit_access
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class blk_file
@@ -223,11 +202,6 @@ inherits file
 	open
 	audit_access
 	execmod
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class sock_file
@@ -236,11 +210,6 @@ inherits file
 	open
 	audit_access
 	execmod
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class fifo_file
@@ -249,11 +218,6 @@ inherits file
 	open
 	audit_access
 	execmod
-	watch
-	watch_mount
-	watch_sb
-	watch_with_perm
-	watch_reads
 }
 
 class fd
@@ -446,7 +410,6 @@ inherits socket
 {
 	nlmsg_read
 	nlmsg_write
-	nlmsg_readpriv
 }
 
 class netlink_tcpdiag_socket

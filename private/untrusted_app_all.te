@@ -92,6 +92,7 @@ allow untrusted_app_all cameraserver_service:service_manager find;
 allow untrusted_app_all drmserver_service:service_manager find;
 allow untrusted_app_all mediaserver_service:service_manager find;
 allow untrusted_app_all mediaextractor_service:service_manager find;
+allow untrusted_app_all mediacodec_service:service_manager find;
 allow untrusted_app_all mediametrics_service:service_manager find;
 allow untrusted_app_all mediadrmserver_service:service_manager find;
 allow untrusted_app_all nfc_service:service_manager find;
@@ -102,6 +103,14 @@ allow untrusted_app_all gpu_service:service_manager find;
 
 # Allow untrusted apps to interact with gpuservice
 binder_call(untrusted_app_all, gpuservice)
+
+# Allow GMS core to access perfprofd output, which is stored
+# in /data/misc/perfprofd/. GMS core will need to list all
+# data stored in that directory to process them one by one.
+userdebug_or_eng(`
+  allow untrusted_app_all perfprofd_data_file:file r_file_perms;
+  allow untrusted_app_all perfprofd_data_file:dir r_dir_perms;
+')
 
 # gdbserver for ndk-gdb ptrace attaches to app process.
 allow untrusted_app_all self:process ptrace;
@@ -135,7 +144,9 @@ allow untrusted_app_all vendor_app_file:lnk_file { open getattr read };
 
 # Write app-specific trace data to the Perfetto traced damon. This requires
 # connecting to its producer socket and obtaining a (per-process) tmpfs fd.
-perfetto_producer(untrusted_app_all)
+allow untrusted_app_all traced:fd use;
+allow untrusted_app_all traced_tmpfs:file { read write getattr map };
+unix_socket_connect(untrusted_app_all, traced_producer, traced)
 
 # Allow heap profiling if the app opts in by being marked
 # profileable/debuggable.
@@ -162,15 +173,13 @@ dontaudit untrusted_app_all proc_uptime:file read;
 # Used by: https://play.google.com/store/apps/details?id=jackpal.androidterm
 create_pty(untrusted_app_all)
 
-# Attempts to write to system_data_file is generally a sign
-# that apps are attempting to access encrypted storage before
-# the ACTION_USER_UNLOCKED intent is delivered. Suppress this
-# denial to prevent third party apps from spamming the logs.
-dontaudit untrusted_app_all system_data_file:dir write;
-
 # Allow access to kcov via its ioctl interface for coverage
 # guided kernel fuzzing.
 userdebug_or_eng(`
   allow untrusted_app_all debugfs_kcov:file rw_file_perms;
   allowxperm untrusted_app_all debugfs_kcov:file ioctl { KCOV_INIT_TRACE KCOV_ENABLE KCOV_DISABLE };
 ')
+
+# Allow access to ashmemd to request /dev/ashmem fds.
+binder_call(untrusted_app_all, ashmemd)
+allow untrusted_app_all ashmem_device:chr_file { getattr read ioctl lock map append write };

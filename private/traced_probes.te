@@ -6,7 +6,9 @@ init_daemon_domain(traced_probes)
 
 # Write trace data to the Perfetto traced damon. This requires connecting to its
 # producer socket and obtaining a (per-process) tmpfs fd.
-perfetto_producer(traced_probes)
+allow traced_probes traced:fd use;
+allow traced_probes traced_tmpfs:file { read write getattr map };
+unix_socket_connect(traced_probes, traced_producer, traced)
 
 # Allow traced_probes to access tracefs.
 allow traced_probes debugfs_tracing:dir r_dir_perms;
@@ -72,9 +74,6 @@ allow traced_probes {
 hal_client_domain(traced_probes, hal_health)
 hal_client_domain(traced_probes, hal_power_stats)
 
-# Allow access to Atrace HAL for enabling vendor/device specific tracing categories.
-hal_client_domain(traced_probes, hal_atrace)
-
 # On debug builds allow to ingest system logs into the trace.
 userdebug_or_eng(`read_logd(traced_probes)')
 
@@ -99,7 +98,6 @@ neverallow traced_probes {
   -apk_data_file
   -dalvikcache_data_file
   -system_data_file
-  -system_data_root_file
   -system_app_data_file
   -backup_data_file
   -bootstat_data_file

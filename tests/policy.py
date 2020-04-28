@@ -3,7 +3,7 @@ import re
 import os
 import sys
 import platform
-import fc_sort
+import FcSort
 
 ###
 # Check whether the regex will match a file path starting with the provided
@@ -413,7 +413,7 @@ class Policy:
                     self.__FcDict[t] = [rec[0]]
             except:
                 pass
-        self.__FcSorted = fc_sort.FcSort(FcPaths)
+        self.__FcSorted = FcSort.FcSort(FcPaths)
 
     # load policy
     def __InitPolicy(self, PolicyPath):

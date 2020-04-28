@@ -37,6 +37,7 @@ allow priv_app system_api_service:service_manager find;
 allow priv_app audioserver_service:service_manager find;
 allow priv_app cameraserver_service:service_manager find;
 allow priv_app drmserver_service:service_manager find;
+allow priv_app mediacodec_service:service_manager find;
 allow priv_app mediadrmserver_service:service_manager find;
 allow priv_app mediaextractor_service:service_manager find;
 allow priv_app mediametrics_service:service_manager find;
@@ -81,6 +82,14 @@ allow priv_app { apk_tmp_file apk_private_tmp_file }:file r_file_perms;
 
 # b/18504118: Allow reads from /data/anr/traces.txt
 allow priv_app anr_data_file:file r_file_perms;
+
+# Allow GMS core to access perfprofd output, which is stored
+# in /data/misc/perfprofd/. GMS core will need to list all
+# data stored in that directory to process them one by one.
+userdebug_or_eng(`
+  allow priv_app perfprofd_data_file:file r_file_perms;
+  allow priv_app perfprofd_data_file:dir r_dir_perms;
+')
 
 # For AppFuse.
 allow priv_app vold:fd use;
@@ -139,7 +148,9 @@ read_runtime_log_tags(priv_app)
 
 # Write app-specific trace data to the Perfetto traced damon. This requires
 # connecting to its producer socket and obtaining a (per-process) tmpfs fd.
-perfetto_producer(priv_app)
+allow priv_app traced:fd use;
+allow priv_app traced_tmpfs:file { read write getattr map };
+unix_socket_connect(priv_app, traced_producer, traced)
 
 # Allow priv_apps to request and collect incident reports.
 # (Also requires DUMP and PACKAGE_USAGE_STATS permissions)
@@ -162,13 +173,11 @@ dontaudit priv_app net_dns_prop:file read;
 dontaudit priv_app proc:file read;
 dontaudit priv_app proc_interrupts:file read;
 dontaudit priv_app proc_modules:file read;
-dontaudit priv_app proc_net:file read;
 dontaudit priv_app proc_stat:file read;
 dontaudit priv_app proc_version:file read;
 dontaudit priv_app sysfs:dir read;
 dontaudit priv_app sysfs:file read;
 dontaudit priv_app sysfs_android_usb:file read;
-dontaudit priv_app sysfs_dm:file r_file_perms;
 dontaudit priv_app wifi_prop:file read;
 dontaudit priv_app { wifi_prop exported_wifi_prop }:file read;
 
@@ -176,12 +185,6 @@ dontaudit priv_app { wifi_prop exported_wifi_prop }:file read;
 # modify them other than to connect
 allow priv_app system_server:udp_socket {
         connect getattr read recvfrom sendto write getopt setopt };
-
-# Attempts to write to system_data_file is generally a sign
-# that apps are attempting to access encrypted storage before
-# the ACTION_USER_UNLOCKED intent is delivered. Suppress this
-# denial to prevent apps from spamming the logs.
-dontaudit priv_app system_data_file:dir write;
 
 ###
 ### neverallow rules

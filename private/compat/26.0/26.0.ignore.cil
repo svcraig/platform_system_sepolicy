@@ -34,7 +34,6 @@
     color_display_service
     content_capture_service
     crossprofileapps_service
-    ctl_apexd_prop
     ctl_interface_restart_prop
     ctl_interface_start_prop
     ctl_interface_stop_prop
@@ -132,11 +131,11 @@
     perfetto_exec
     perfetto_tmpfs
     perfetto_traces_data_file
+    perfprofd_service
     property_info
     recovery_socket
     role_service
     runas_app
-    art_apex_dir
     runtime_service
     secure_element
     secure_element_device
@@ -196,7 +195,6 @@
     usbd
     usbd_exec
     usbd_tmpfs
-    vendor_apex_file
     vendor_init
     vendor_shell
     vold_metadata_file

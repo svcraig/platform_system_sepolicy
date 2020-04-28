@@ -504,6 +504,10 @@
 (expandtypeattribute (pdx_performance_dir_28_0) true)
 (expandtypeattribute (performanced_28_0) true)
 (expandtypeattribute (performanced_exec_28_0) true)
+(expandtypeattribute (perfprofd_28_0) true)
+(expandtypeattribute (perfprofd_data_file_28_0) true)
+(expandtypeattribute (perfprofd_exec_28_0) true)
+(expandtypeattribute (perfprofd_service_28_0) true)
 (expandtypeattribute (permission_service_28_0) true)
 (expandtypeattribute (persist_debug_prop_28_0) true)
 (expandtypeattribute (persistent_data_block_service_28_0) true)
@@ -1238,7 +1242,6 @@
 (typeattributeset mdnsd_28_0 (mdnsd))
 (typeattributeset mdnsd_socket_28_0 (mdnsd_socket))
 (typeattributeset mdns_socket_28_0 (mdns_socket))
-(typeattributeset hal_omx_server (mediacodec_28_0))
 (typeattributeset mediacodec_28_0 (mediacodec))
 (typeattributeset mediacodec_exec_28_0 (mediacodec_exec))
 (typeattributeset mediacodec_service_28_0 (mediacodec_service))
@@ -1344,6 +1347,10 @@
 (typeattributeset pdx_performance_dir_28_0 (pdx_performance_dir))
 (typeattributeset performanced_28_0 (performanced))
 (typeattributeset performanced_exec_28_0 (performanced_exec))
+(typeattributeset perfprofd_28_0 (perfprofd))
+(typeattributeset perfprofd_data_file_28_0 (perfprofd_data_file))
+(typeattributeset perfprofd_exec_28_0 (perfprofd_exec))
+(typeattributeset perfprofd_service_28_0 (perfprofd_service))
 (typeattributeset permission_service_28_0 (permission_service))
 (typeattributeset persist_debug_prop_28_0 (persist_debug_prop))
 (typeattributeset persistent_data_block_service_28_0 (persistent_data_block_service))
@@ -1374,8 +1381,6 @@
   ( proc
     proc_fs_verity
     proc_keys
-    proc_kpageflags
-    proc_lowmemorykiller
     proc_pressure_cpu
     proc_pressure_io
     proc_pressure_mem
@@ -1612,9 +1617,7 @@
 (typeattributeset thermalcallback_hwservice_28_0 (thermalcallback_hwservice))
 (typeattributeset thermal_service_28_0 (thermal_service))
 (typeattributeset timezone_service_28_0 (timezone_service))
-(typeattributeset tmpfs_28_0
-  ( mnt_sdcard_file
-    tmpfs))
+(typeattributeset tmpfs_28_0 (tmpfs))
 (typeattributeset tombstoned_28_0 (tombstoned))
 (typeattributeset tombstone_data_file_28_0 (tombstone_data_file))
 (typeattributeset tombstoned_crash_socket_28_0 (tombstoned_crash_socket))

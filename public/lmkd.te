@@ -10,18 +10,19 @@ allow lmkd self:global_capability_class_set { dac_override dac_read_search sys_r
 # b/16236289
 allow lmkd self:global_capability_class_set ipc_lock;
 
-## Open and write to /proc/PID/oom_score_adj and /proc/PID/timerslack_ns
+## Open and write to /proc/PID/oom_score_adj
 ## TODO: maybe scope this down?
-r_dir_file(lmkd, domain)
-allow lmkd domain:file write;
+r_dir_file(lmkd, appdomain)
+allow lmkd appdomain:file write;
+r_dir_file(lmkd, system_server)
+allow lmkd system_server:file write;
 
 ## Writes to /sys/module/lowmemorykiller/parameters/minfree
 r_dir_file(lmkd, sysfs_lowmemorykiller)
 allow lmkd sysfs_lowmemorykiller:file w_file_perms;
 
-# setsched and send kill signals to any registered process
-allow lmkd domain:process { setsched sigkill };
-# TODO: delete this line b/131761776
+# setsched and send kill signals
+allow lmkd appdomain:process { setsched sigkill };
 allow lmkd kernel:process { setsched };
 
 # Clean up old cgroups
@@ -34,7 +35,6 @@ allow lmkd cgroup:file r_file_perms;
 allow lmkd self:global_capability_class_set sys_nice;
 
 allow lmkd proc_zoneinfo:file r_file_perms;
-allow lmkd proc_vmstat:file r_file_perms;
 
 # Set sys.lmk.* properties.
 set_prop(lmkd, system_lmk_prop)
@@ -46,9 +46,6 @@ allow lmkd domain:file { open read };
 # live lock watchdog process allowed to dump process trace and
 # reboot because orderly shutdown may not be possible.
 allow lmkd proc_sysrq:file rw_file_perms;
-
-# Read /proc/lowmemorykiller
-allow lmkd proc_lowmemorykiller:file r_file_perms;
 
 # Read /proc/meminfo
 allow lmkd proc_meminfo:file r_file_perms;
@@ -67,4 +64,3 @@ unix_socket_send(lmkd, statsdw, statsd)
 
 # never honor LD_PRELOAD
 neverallow * lmkd:process noatsecure;
-neverallow lmkd self:global_capability_class_set sys_ptrace;

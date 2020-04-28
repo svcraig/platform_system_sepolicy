@@ -20,12 +20,13 @@ type lpdump_service,            service_manager_type;
 type mediaserver_service,       service_manager_type;
 type mediametrics_service,      service_manager_type;
 type mediaextractor_service,    service_manager_type;
+type mediacodec_service,        service_manager_type;
 type mediadrmserver_service,    service_manager_type;
 type netd_service,              service_manager_type;
 type nfc_service,               service_manager_type;
+type perfprofd_service,         service_manager_type;
 type radio_service,             service_manager_type;
 type secure_element_service,    service_manager_type;
-type service_manager_service,   service_manager_type;
 type storaged_service,          service_manager_type;
 type surfaceflinger_service,    app_api_service, ephemeral_app_api_service, service_manager_type;
 type system_app_service,        service_manager_type;
@@ -54,7 +55,6 @@ type backup_service, app_api_service, ephemeral_app_api_service, system_server_s
 type batterystats_service, app_api_service, ephemeral_app_api_service, system_server_service, service_manager_type;
 type battery_service, system_server_service, service_manager_type;
 type binder_calls_stats_service, system_server_service, service_manager_type;
-type blob_store_service, app_api_service, system_server_service, service_manager_type;
 type bluetooth_manager_service, app_api_service, ephemeral_app_api_service, system_server_service, service_manager_type;
 type broadcastradio_service, system_server_service, service_manager_type;
 type cameraproxy_service, system_server_service, service_manager_type;
@@ -94,7 +94,6 @@ type lowpan_service, system_api_service, system_server_service, service_manager_
 type ethernet_service, app_api_service, system_server_service, service_manager_type;
 type biometric_service, app_api_service, system_server_service, service_manager_type;
 type bugreport_service, system_api_service, system_server_service, service_manager_type;
-type platform_compat_service, system_server_service, service_manager_type;
 type face_service, app_api_service, system_server_service, service_manager_type;
 type fingerprint_service, app_api_service, system_server_service, service_manager_type;
 type gfxinfo_service, system_api_service, system_server_service, service_manager_type;
@@ -183,18 +182,11 @@ type webviewupdate_service, app_api_service, ephemeral_app_api_service, system_s
 type wifip2p_service, app_api_service, system_server_service, service_manager_type;
 type wifiscanner_service, system_api_service, system_server_service, service_manager_type;
 type wifi_service, app_api_service, system_server_service, service_manager_type;
-type wifi_stack_service, system_server_service, service_manager_type;
 type wificond_service, service_manager_type;
 type wifiaware_service, app_api_service, system_server_service, service_manager_type;
 type window_service, system_api_service, system_server_service, service_manager_type;
 type inputflinger_service, system_api_service, system_server_service, service_manager_type;
 type wpantund_service, system_api_service, service_manager_type;
-
-###
-### HAL Services
-###
-
-type hal_vibrator_service, vendor_service, service_manager_type;
 
 ###
 ### Neverallow rules

@@ -3,7 +3,6 @@
 neverallow {
   halserverdomain
   -hal_bluetooth_server
-  -hal_can_controller_server
   -hal_wifi_server
   -hal_wifi_hostapd_server
   -hal_wifi_supplicant_server
@@ -19,7 +18,6 @@ neverallow {
 neverallow {
   halserverdomain
   -hal_automotive_socket_exemption
-  -hal_can_controller_server
   -hal_tetheroffload_server
   -hal_wifi_server
   -hal_wifi_hostapd_server

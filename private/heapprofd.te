@@ -35,7 +35,9 @@ dontaudit heapprofd domain:dir { search open };
 
 # Write trace data to the Perfetto traced daemon. This requires connecting to
 # its producer socket and obtaining a (per-process) tmpfs fd.
-perfetto_producer(heapprofd)
+allow heapprofd traced:fd use;
+allow heapprofd traced_tmpfs:file { read write getattr map };
+unix_socket_connect(heapprofd, traced_producer, traced)
 
 # When handling profiling for all processes, heapprofd needs to read
 # executables/libraries/etc to do stack unwinding.
@@ -48,8 +50,6 @@ userdebug_or_eng(`
   # Some dex files are not world-readable.
   # We are still constrained by the SELinux rules above.
   allow heapprofd self:global_capability_class_set dac_read_search;
-
-  allow heapprofd proc_kpageflags:file r_file_perms;
 ')
 
 # This is going to happen on user but is benign because central heapprofd

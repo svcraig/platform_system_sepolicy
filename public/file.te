@@ -9,7 +9,6 @@ type proc_security, fs_type, proc_type;
 type proc_drop_caches, fs_type, proc_type;
 type proc_overcommit_memory, fs_type, proc_type;
 type proc_min_free_order_shift, fs_type, proc_type;
-type proc_kpageflags, fs_type, proc_type;
 # proc, sysfs, or other nodes that permit configuration of kernel usermodehelpers.
 type usermodehelper, fs_type, proc_type;
 type sysfs_usermodehelper, fs_type, sysfs_type;
@@ -33,7 +32,6 @@ type proc_iomem, fs_type, proc_type;
 type proc_keys, fs_type, proc_type;
 type proc_kmsg, fs_type, proc_type;
 type proc_loadavg, fs_type, proc_type;
-type proc_lowmemorykiller, fs_type, proc_type;
 type proc_max_map_count, fs_type, proc_type;
 type proc_meminfo, fs_type, proc_type;
 type proc_misc, fs_type, proc_type;
@@ -90,14 +88,13 @@ type sysfs_loop, fs_type, sysfs_type;
 type sysfs_hwrandom, fs_type, sysfs_type;
 type sysfs_nfc_power_writable, fs_type, sysfs_type, mlstrustedobject;
 type sysfs_wake_lock, fs_type, sysfs_type;
+type sysfs_mac_address, fs_type, sysfs_type;
 type sysfs_net, fs_type, sysfs_type;
 type sysfs_power, fs_type, sysfs_type;
 type sysfs_rtc, fs_type, sysfs_type;
-type sysfs_suspend_stats, fs_type, sysfs_type;
 type sysfs_switch, fs_type, sysfs_type;
 type sysfs_transparent_hugepage, fs_type, sysfs_type;
 type sysfs_usb, fs_type, sysfs_type;
-type sysfs_wakeup, fs_type, sysfs_type;
 type sysfs_wakeup_reasons, fs_type, sysfs_type;
 type sysfs_fs_ext4_features, sysfs_type, fs_type;
 type sysfs_fs_f2fs, sysfs_type, fs_type;
@@ -153,14 +150,10 @@ type system_event_log_tags_file, system_file_type, file_type;
 type system_lib_file, system_file_type, file_type;
 # system libraries that are available only to bootstrap processes
 type system_bootstrap_lib_file, system_file_type, file_type;
-# Default type for the group file /system/etc/group.
-type system_group_file, system_file_type, file_type;
 # Default type for linker executable /system/bin/linker[64].
 type system_linker_exec, system_file_type, file_type;
 # Default type for linker config /system/etc/ld.config.*.
 type system_linker_config_file, system_file_type, file_type;
-# Default type for the passwd file /system/etc/passwd.
-type system_passwd_file, system_file_type, file_type;
 # Default type for linker config /system/etc/seccomp_policy/*.
 type system_seccomp_policy_file, system_file_type, file_type;
 # Default type for cacerts in /system/etc/security/cacerts/*.
@@ -177,8 +170,6 @@ type vendor_cgroup_desc_file, vendor_file_type, file_type;
 type task_profiles_file, system_file_type, file_type;
 # Vendor task profiles file under /vendor/etc/task_profiles.json
 type vendor_task_profiles_file, vendor_file_type, file_type;
-# Type for /system/apex/com.android.art
-type art_apex_dir, system_file_type, file_type;
 
 # Default type for directories search for
 # HAL implementations
@@ -217,8 +208,6 @@ type gsi_metadata_file, file_type;
 type password_slot_metadata_file, file_type;
 # APEX files within /metadata
 type apex_metadata_file, file_type;
-# libsnapshot files within /metadata
-type ota_metadata_file, file_type;
 
 # Type for /dev/cpu_variant:.*.
 type dev_cpu_variant, file_type;
@@ -230,8 +219,6 @@ type logcat_exec, system_file_type, exec_type, file_type;
 type cgroup_rc_file, file_type;
 # /cores for coredumps on userdebug / eng builds
 type coredump_file, file_type;
-# Type of /data itself
-type system_data_root_file, file_type, data_file_type, core_data_file_type;
 # Default type for anything under /data.
 type system_data_file, file_type, data_file_type, core_data_file_type;
 # Type for /data/system/packages.list.
@@ -242,7 +229,8 @@ type packages_list_file, file_type, data_file_type, core_data_file_type;
 type vendor_data_file, file_type, data_file_type;
 # Unencrypted data
 type unencrypted_data_file, file_type, data_file_type, core_data_file_type;
-# installd-create files in /data/misc/installd such as layout_version
+# /data/.layout_version or other installd-created files that
+# are created in a system_data_file directory.
 type install_data_file, file_type, data_file_type, core_data_file_type;
 # /data/drm - DRM plugin data
 type drm_data_file, file_type, data_file_type, core_data_file_type;
@@ -298,14 +286,11 @@ type dhcp_data_file, file_type, data_file_type, core_data_file_type;
 type server_configurable_flags_data_file, file_type, data_file_type, core_data_file_type;
 # /data/app-staging
 type staging_data_file, file_type, data_file_type, core_data_file_type;
-# /vendor/apex
-type vendor_apex_file, vendor_file_type, file_type;
 
 # Mount locations managed by vold
 type mnt_media_rw_file, file_type;
 type mnt_user_file, file_type;
 type mnt_expand_file, file_type;
-type mnt_sdcard_file, file_type;
 type storage_file, file_type;
 
 # Label for storage dirs which are just mount stubs
@@ -359,6 +344,7 @@ type wifi_data_file, file_type, data_file_type, core_data_file_type;
 type zoneinfo_data_file, file_type, data_file_type, core_data_file_type;
 type vold_data_file, file_type, data_file_type, core_data_file_type;
 type iorapd_data_file, file_type, data_file_type, core_data_file_type;
+type perfprofd_data_file, file_type, data_file_type, core_data_file_type, mlstrustedobject;
 type tee_data_file, file_type, data_file_type;
 type update_engine_data_file, file_type, data_file_type, core_data_file_type;
 type update_engine_log_data_file, file_type, data_file_type, core_data_file_type;
@@ -479,7 +465,7 @@ type sepolicy_file, system_file_type, file_type;
 type service_contexts_file, system_file_type, file_type;
 
 # nonplat service_contexts file (only accessible on non full-treble devices)
-type nonplat_service_contexts_file, vendor_file_type, file_type;
+type nonplat_service_contexts_file, file_type;
 
 # hwservice_contexts file
 type hwservice_contexts_file, system_file_type, file_type;

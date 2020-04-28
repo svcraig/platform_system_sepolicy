@@ -3,7 +3,6 @@ typeattribute zygote coredomain;
 typeattribute zygote mlstrustedsubject;
 
 init_daemon_domain(zygote)
-tmpfs_domain(zygote)
 
 read_runtime_log_tags(zygote)
 
@@ -52,8 +51,6 @@ allow zygote dalvikcache_data_file:file execute;
 
 # Allow zygote to create JIT memory.
 allow zygote self:process execmem;
-allow zygote zygote_tmpfs:file execute;
-allow zygote ashmem_libcutils_device:chr_file execute;
 
 # Execute idmap and dex2oat within zygote's own domain.
 # TODO:  Should either of these be transitioned to the same domain
@@ -145,9 +142,6 @@ get_prop(zygote, device_config_runtime_native_boot_prop)
 
 # ingore spurious denials
 dontaudit zygote self:global_capability_class_set sys_resource;
-
-# Allow zygote to use ashmem fds from system_server.
-allow zygote system_server:fd use;
 
 ###
 ### neverallow rules

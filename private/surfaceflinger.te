@@ -19,7 +19,6 @@ hal_client_domain(surfaceflinger, hal_codec2)
 hal_client_domain(surfaceflinger, hal_omx)
 hal_client_domain(surfaceflinger, hal_configstore)
 hal_client_domain(surfaceflinger, hal_power)
-hal_client_domain(surfaceflinger, hal_bufferhub)
 allow surfaceflinger hidl_token_hwservice:hwservice_manager find;
 
 # Perform Binder IPC.
@@ -66,9 +65,6 @@ userdebug_or_eng(`
   allow surfaceflinger wm_trace_data_file:dir rw_dir_perms;
   allow surfaceflinger wm_trace_data_file:file { getattr setattr create w_file_perms };
 ')
-
-# Needed to register as a Perfetto producer.
-perfetto_producer(surfaceflinger)
 
 # Use socket supplied by adbd, for cmd gpu vkjson etc.
 allow surfaceflinger adbd:unix_stream_socket { read write getattr };

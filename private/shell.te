@@ -34,7 +34,9 @@ unix_socket_connect(shell, traced_consumer, traced)
 
 # Allow shell binaries to write trace data to Perfetto. Used for testing and
 # cmdline utils.
-perfetto_producer(shell)
+allow shell traced:fd use;
+allow shell traced_tmpfs:file { read write getattr map };
+unix_socket_connect(shell, traced_producer, traced)
 
 domain_auto_trans(shell, vendor_shell_exec, vendor_shell)
 
@@ -72,14 +74,3 @@ allow shell rs_exec:file rx_file_perms;
 # Allow shell to start and comminicate with lpdumpd.
 set_prop(shell, lpdumpd_prop);
 binder_call(shell, lpdumpd)
-
-# Allow shell to set linker property
-userdebug_or_eng(`
-  set_prop(shell, linker_prop)
-')
-
-# Allow shell to get encryption policy of /data/local/tmp/, for CTS
-allowxperm shell shell_data_file:dir ioctl {
-  FS_IOC_GET_ENCRYPTION_POLICY
-  FS_IOC_GET_ENCRYPTION_POLICY_EX
-};

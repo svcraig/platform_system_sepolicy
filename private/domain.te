@@ -42,9 +42,6 @@ allow domain vendor_task_profiles_file:file r_file_perms;
 # if memfd support can be used if device supports it
 get_prop(domain, use_memfd_prop);
 
-# Allow to read properties for linker
-get_prop(domain, linker_prop);
-
 # For now, everyone can access core property files
 # Device specific properties are not granted by default
 not_compatible_property(`
@@ -85,13 +82,6 @@ userdebug_or_eng(`
   allow domain su:key search;
 ')
 
-# Allow access to linkerconfig file
-allow domain linkerconfig_file:dir search;
-allow domain linkerconfig_file:file r_file_perms;
-
-# Allow all processes to check for the existence of the boringssl_self_test_marker files.
-allow domain boringssl_self_test_marker:dir search;
-
 # Limit ability to ptrace or read sensitive /proc/pid files of processes
 # with other UIDs to these whitelisted domains.
 neverallow {
@@ -102,6 +92,7 @@ neverallow {
   userdebug_or_eng(`-incidentd')
   -storaged
   -system_server
+  userdebug_or_eng(`-perfprofd')
 } self:global_capability_class_set sys_ptrace;
 
 # Limit ability to generate hardware unique device ID attestations to priv_apps
@@ -136,7 +127,7 @@ neverallow {
   -app_zygote
   -dexoptanalyzer
   -installd
-  -iorap_prefetcherd
+  userdebug_or_eng(`-perfprofd')
   -profman
   -rs # spawned by appdomain, so carryover the exception above
   -runas
@@ -158,7 +149,7 @@ neverallow {
   -appdomain
   -app_zygote
   -installd
-  -iorap_prefetcherd
+  userdebug_or_eng(`-perfprofd')
   -rs # spawned by appdomain, so carryover the exception above
 } { privapp_data_file app_data_file }:file_class_set open;
 
@@ -203,7 +194,6 @@ neverallow {
     domain
     -appdomain
     with_asan(`-asan_extract')
-    -iorap_prefetcherd
     -shell
     userdebug_or_eng(`-su')
     -system_server_startup # for memfd backed executable regions
@@ -264,10 +254,12 @@ define(`dac_override_allowed', `{
   dumpstate
   init
   installd
+  install_recovery
   userdebug_or_eng(`llkd')
   lmkd
   migrate_legacy_obb_data
   netd
+  perfprofd
   postinstall_dexopt
   recovery
   rss_hwm_reset
@@ -287,7 +279,6 @@ neverallow ~dac_override_allowed self:global_capability_class_set dac_override;
 # this list should be a superset of the one above.
 neverallow ~{
   dac_override_allowed
-  iorap_prefetcherd
   traced_probes
   userdebug_or_eng(`heapprofd')
 } self:global_capability_class_set dac_read_search;
@@ -321,5 +312,4 @@ neverallow {
   -uncrypt
   -tee
   -hal_bootctl_server
-  -fastbootd
 } self:global_capability_class_set sys_rawio;

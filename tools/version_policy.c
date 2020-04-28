@@ -65,15 +65,14 @@ static int read_cil_file(struct cil_db **db, char *path) {
 	rc = cil_add_file(*db, path, buff, file_size);
 	if (rc != SEPOL_OK) {
 		fprintf(stderr, "Failure adding %s to parse tree\n", path);
-		goto parse_err;
+		goto err;
 	}
 	free(buff);
 
 	return SEPOL_OK;
 err:
-	fclose(file);
-parse_err:
 	free(buff);
+	fclose(file);
 file_err:
 	cil_db_destroy(db);
 	return rc;

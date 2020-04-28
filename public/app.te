@@ -357,6 +357,9 @@ allow appdomain audioserver_tmpfs:file { getattr map read write };
 allow appdomain system_server_tmpfs:file { getattr map read write };
 allow appdomain zygote_tmpfs:file { map read };
 
+# Allow vendor apps access to ashmemd to request /dev/ashmem fds.
+binder_call({ appdomain -coredomain }, ashmemd)
+
 ###
 ### Neverallow rules
 ###
@@ -364,7 +367,7 @@ allow appdomain zygote_tmpfs:file { map read };
 ###
 
 # Superuser capabilities.
-# bluetooth/wifi requires net_admin and wake_alarm. network stack app requires net_admin.
+# bluetooth requires net_admin and wake_alarm. network stack app requires net_admin.
 neverallow { appdomain -bluetooth -network_stack } self:capability_class_set *;
 
 # Block device access.
@@ -390,7 +393,7 @@ neverallow { appdomain -bluetooth } hci_attach_dev:chr_file
 neverallow appdomain tee_device:chr_file { read write };
 
 # Privileged netlink socket interfaces.
-neverallow { appdomain -network_stack }
+neverallow appdomain
     domain:{
         netlink_tcpdiag_socket
         netlink_nflog_socket
@@ -488,8 +491,9 @@ neverallow appdomain
 neverallow appdomain
     systemkeys_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
-neverallow { appdomain -network_stack }
-    wifi_data_file:dir_file_class_set *;
+neverallow appdomain
+    wifi_data_file:dir_file_class_set
+    { create write setattr relabelfrom relabelto append unlink link rename };
 neverallow appdomain
     dhcp_data_file:dir_file_class_set
     { create write setattr relabelfrom relabelto append unlink link rename };
@@ -512,7 +516,7 @@ neverallow appdomain
     proc:dir_file_class_set write;
 
 # Access to syslog(2) or /proc/kmsg.
-neverallow { appdomain userdebug_or_eng(`-network_stack') } kernel:system { syslog_read syslog_mod syslog_console };
+neverallow appdomain kernel:system { syslog_read syslog_mod syslog_console };
 
 # SELinux is not an API for apps to use
 neverallow { appdomain -shell } *:security { compute_av check_context };
